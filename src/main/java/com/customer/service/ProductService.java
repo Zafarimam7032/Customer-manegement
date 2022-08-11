@@ -10,11 +10,11 @@ public interface ProductService {
 	
 	public Product getProductInfo(String productId);
  
-	public boolean addProduct(Product product);
+	public boolean addProduct(String customerId,Product product);
 	
-	public Boolean UpdateProductInfo(Product product);
+	public Boolean UpdateProductInfo(String customerId,String productId,Product product);
 	
-	public Boolean deleteProductInfo(String productId);
+	public Boolean deleteProductInfo(String customerId,String productId);
 	
 	
 	

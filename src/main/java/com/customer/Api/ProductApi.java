@@ -10,41 +10,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import com.customer.model.Product;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-import com.customer.model.Customer;
-
-public interface CustomerApi {
-
-	@GetMapping(path = "/get/all/customer")
+public interface ProductApi {
+	@GetMapping(path = "/get/all/product")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<List<Customer>> getAllCustomers();
+	public ResponseEntity<List<Product>> getAllProduct();
 	
-	@GetMapping(path = "/get/{customerId}")
+	@GetMapping(path = "/get/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Customer> getCustomerDetails(@PathVariable("customerId") String customerId);
+	public ResponseEntity<Product> getProductDetails(@PathVariable("productId") String productId);
 	
-	@PostMapping(path = "/add")
+	@PostMapping(path = "/add/{customerId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> addCustomerDetails(@RequestBody Customer customer);
+	public ResponseEntity<Boolean> addProductDetails(@PathVariable("customerId") String customerId, @RequestBody Product product);
 
-	@PutMapping(path = "/update/customerId{customerId}")
+	@PutMapping(path = "/update/customerid/{customerId}/productid/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> updateCustomerDetails(@PathVariable("customerId") String customerId, @RequestBody Customer customer);
+	public ResponseEntity<Boolean> updateProductDetails(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId,@RequestBody Product product);
 	
-	@DeleteMapping(path = "/delete/{customerId}")
+	@DeleteMapping(path = "/delete/customerId/{customerId}/productid/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> deleteCustomerDetails(@PathVariable("customerId") String customerId);
+	public ResponseEntity<Boolean> deleteProdcutDetails(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
 
 }

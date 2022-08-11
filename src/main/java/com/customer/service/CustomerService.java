@@ -10,7 +10,7 @@ public interface CustomerService {
 	 
 	public Customer findCustomerByCustomerId(String customerId);
 	
-	public Boolean updateCustomerDetails(Customer customer);
+	public Boolean updateCustomerDetails(String customerId,Customer customer);
 	
 	public Boolean deleteCustomerDetails(String customerId);
 	

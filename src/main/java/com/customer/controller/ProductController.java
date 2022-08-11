@@ -9,24 +9,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.customer.Api.CustomerApi;
-import com.customer.model.Customer;
-import com.customer.service.CustomerService;
+import com.customer.Api.ProductApi;
+import com.customer.model.Product;
+import com.customer.service.ProductService;
 
 @RestController
-public class CustomerController implements CustomerApi {
+public class ProductController implements ProductApi {
 
-	Logger logger = LoggerFactory.getLogger(CustomerController.class);
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private CustomerService customerService;
+	private ProductService productService;
 
 	@Override
-	public ResponseEntity<List<Customer>> getAllCustomers() {
-		logger.info("getting all customer info");
+	public ResponseEntity<List<Product>> getAllProduct() {
+		logger.info("getting all product info");
 		try {
-			List<Customer> allCustomer = customerService.findAllCustomer();
-			return new ResponseEntity<>(allCustomer, HttpStatus.OK);
+			List<Product> products = productService.getAllProducts();
+			return new ResponseEntity<>(products, HttpStatus.OK);
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -37,11 +37,10 @@ public class CustomerController implements CustomerApi {
 	}
 
 	@Override
-	public ResponseEntity<Customer> getCustomerDetails(String customerId) {
-		logger.info("getting  customer info");
+	public ResponseEntity<Product> getProductDetails(String productId) {
 		try {
-			Customer customer = customerService.findCustomerByCustomerId(customerId);
-			return new ResponseEntity<>(customer, HttpStatus.OK);
+			Product product = productService.getProductInfo(productId);
+			return new ResponseEntity<>(product, HttpStatus.OK);
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -49,14 +48,13 @@ public class CustomerController implements CustomerApi {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@Override
-	public ResponseEntity<Boolean> addCustomerDetails(Customer customer) {
+	public ResponseEntity<Boolean> addProductDetails(String customerId, Product product) {
 		try {
-			Boolean customerdeatislfalg = customerService.AddCustomerDetails(customer);
-			if (customerdeatislfalg) {
+			boolean addProductflag = productService.addProduct(customerId, product);
+			if (addProductflag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
@@ -67,13 +65,14 @@ public class CustomerController implements CustomerApi {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 
 	@Override
-	public ResponseEntity<Boolean> updateCustomerDetails(String customerId, Customer customer) {
+	public ResponseEntity<Boolean> updateProductDetails(String customerId, String productId, Product product) {
 		try {
-			Boolean customerupdatefalg = customerService.updateCustomerDetails(customerId,customer);
-			if (customerupdatefalg) {
+			Boolean updateProductInfoFlag = productService.UpdateProductInfo(customerId, productId, product);
+			if (updateProductInfoFlag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
@@ -87,10 +86,10 @@ public class CustomerController implements CustomerApi {
 	}
 
 	@Override
-	public ResponseEntity<Boolean> deleteCustomerDetails(String customerId) {
+	public ResponseEntity<Boolean> deleteProdcutDetails(String customerId, String productId) {
 		try {
-			Boolean customerdeletedfalg = customerService.deleteCustomerDetails(customerId);
-			if (customerdeletedfalg) {
+			Boolean deleteProductInfoFlag = productService.deleteProductInfo(customerId,productId);
+			if (deleteProductInfoFlag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
@@ -101,6 +100,7 @@ public class CustomerController implements CustomerApi {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 
 }
