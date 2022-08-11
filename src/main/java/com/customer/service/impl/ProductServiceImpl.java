@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 		boolean check = false;
 		Product dbProduct = productRepository.findByProductId(product.getProductId());
 		if (Objects.isNull(dbProduct)) {
-			Customer customer = customerRepository.findByCustomerId(customerId);
+			Customer customer = customerRepository.findBycustomerId(customerId);
 			if (Objects.nonNull(customer)) {
 				customer.getProducts().add(product);
 				Customer savedCustomer = customerRepository.save(customer);
@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean UpdateProductInfo(String customerId, String productId, Product product) {
 		boolean check = false;
-		Customer customer = customerRepository.findByCustomerId(customerId);
+		Customer customer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(customer)) {
 			Product filtedProduct = customer.getProducts().stream()
 					.filter(prod -> prod.getProductId().equalsIgnoreCase(productId)).findFirst().orElse(null);
@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean deleteProductInfo(String customerId, String productId) {
 		boolean check = false;
-		Customer customer = customerRepository.findByCustomerId(customerId);
+		Customer customer = customerRepository.findBycustomerId(customerId);
 		Product product = customer.getProducts().stream()
 				.filter(prod -> prod.getProductId().equalsIgnoreCase(productId)).findFirst().orElse(null);
 		if (Objects.nonNull(product)) {

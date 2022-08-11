@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.customer.model.Customer;
-import com.customer.model.Product;
 import com.customer.repository.CustomerRepository;
-import com.customer.repository.ProductRepository;
 import com.customer.service.CustomerService;
 
 @Service
@@ -33,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findCustomerByCustomerId(String customerId) {
-		Customer customer = customerRepository.findByCustomerId(customerId);
+		Customer customer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(customer)) {
 			return customer;
 		}
@@ -43,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Boolean updateCustomerDetails(String customerId, Customer customer) {
 		boolean check = false;
-		Customer dbCustomer = customerRepository.findByCustomerId(customerId);
+		Customer dbCustomer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(dbCustomer)) {
 			dbCustomer.setAddress(customer.getAddress() == null ? null : customer.getAddress());
 			dbCustomer.setCustomerName(customer.getCustomerName() == null ? null : customer.getCustomerName());
@@ -71,10 +69,10 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Boolean AddCustomerDetails(Customer customer) {
 		boolean check = false;
-		Customer dbCustomer = customerRepository.findByCustomerId(customer.getCustomerId());
+		Customer dbCustomer = customerRepository.findBycustomerId(customer.getCustomerId());
 		if (Objects.isNull(dbCustomer)) {
 			Customer saveCustomer = customerRepository.save(customer);
-			if (Objects.nonNull(dbCustomer)) {
+			if (Objects.nonNull(saveCustomer)) {
 				check = true;
 			}
 		}

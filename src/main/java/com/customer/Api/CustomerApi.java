@@ -23,12 +23,12 @@ public interface CustomerApi {
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<List<Customer>> getAllCustomers();
 	
-	@GetMapping(path = "/get/{customerId}")
+	@GetMapping(path = "/getCustomer/{customerId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Customer> getCustomerDetails(@PathVariable("customerId") String customerId);
-	
+
 	@PostMapping(path = "/add")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
