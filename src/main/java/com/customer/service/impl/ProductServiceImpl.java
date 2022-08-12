@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getProductInfo(String productId) {
-		Product product = productRepository.findByProductId(productId);
+		Product product = productRepository.findByproductId(productId);
 		if (Objects.nonNull(product)) {
 			return product;
 		}
@@ -44,20 +44,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public boolean addProduct(String customerId, Product product) {
+	public boolean addProduct( Product product) {
 		boolean check = false;
-		Product dbProduct = productRepository.findByProductId(product.getProductId());
+		Product dbProduct = productRepository.findByproductId(product.getProductId());
 		if (Objects.isNull(dbProduct)) {
-			Customer customer = customerRepository.findBycustomerId(customerId);
-			if (Objects.nonNull(customer)) {
-				customer.getProducts().add(product);
-				Customer savedCustomer = customerRepository.save(customer);
-				if (Objects.nonNull(savedCustomer)) {
+			Product saveproduct =productRepository.save(product);
+				if ( Objects.nonNull(saveproduct)) {
 					check = true;
 				}
-
 			}
-		}
 		return check;
 	}
 
@@ -101,4 +96,23 @@ public class ProductServiceImpl implements ProductService {
 		return check;
 	}
 
+	@Override
+	public Boolean assignProductToCustomer(String customerId, String productId) {
+		Boolean check = false;
+		Customer customer = customerRepository.findBycustomerId(customerId);
+
+		if (Objects.nonNull(customer)) {
+			Product product = productRepository.findByproductId(productId);
+			if (Objects.nonNull(product)) {
+				product.getCustomers().add(customer);
+				customer.getProducts().add(product);
+			//	Customer saveCustomer = customerRepository.save(customer);
+				Product saveProduct = productRepository.save(product);
+				if (Objects.nonNull(saveProduct)) {
+					check = true;
+				}
+			}
+		}
+		return check;
+	}
 }

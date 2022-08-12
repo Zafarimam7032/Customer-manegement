@@ -28,11 +28,11 @@ public interface ProductApi {
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Product> getProductDetails(@PathVariable("productId") String productId);
 	
-	@PostMapping(path = "/product/add/{productId}")
+	@PostMapping(path = "/product/add")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> addProductDetails(@PathVariable("customerId") String customerId, @RequestBody Product product);
+	public ResponseEntity<Boolean> addProductDetails( @RequestBody Product product);
 
 	@PutMapping(path = "/product/update/customerid/{customerId}/productid/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
@@ -46,4 +46,9 @@ public interface ProductApi {
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Boolean> deleteProdcutDetails(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
 
+	@PutMapping(path = "/product/assign/customerid/{customerId}/productid/{productId}")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
+			@ApiResponse(responseCode = "500", description = "server error"),
+			@ApiResponse(responseCode = "404", description = "service not found") })
+	public ResponseEntity<Boolean> assignProductToCustomer(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
 }

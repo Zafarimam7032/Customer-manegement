@@ -43,9 +43,9 @@ public class CustomerServiceImpl implements CustomerService {
 		boolean check = false;
 		Customer dbCustomer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(dbCustomer)) {
-			dbCustomer.setAddress(customer.getAddress() == null ? null : customer.getAddress());
-			dbCustomer.setCustomerName(customer.getCustomerName() == null ? null : customer.getCustomerName());
-			dbCustomer.setMobileNumber(customer.getMobileNumber() == null ? null : customer.getMobileNumber());
+			dbCustomer.setAddress(customer.getAddress() == null ? dbCustomer.getAddress() : customer.getAddress());
+			dbCustomer.setCustomerName(customer.getCustomerName() == null ? dbCustomer.getCustomerId() : customer.getCustomerName());
+			dbCustomer.setMobileNumber(customer.getMobileNumber() == null ? dbCustomer.getMobileNumber() : customer.getMobileNumber());
 			Customer savedCustomer = customerRepository.save(dbCustomer);
 			if (Objects.nonNull(savedCustomer)) {
 				check = true;
@@ -58,8 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
 	public Boolean deleteCustomerDetails(String customerId) {
 		boolean check = false;
 		try {
-			customerRepository.deleteByCustomerId(customerId);
-			check = true;
+			Customer customer = customerRepository.findBycustomerId(customerId);
+          if(Objects.nonNull(customer)){
+			  customerRepository.deleteById(customer.getId());
+			  check = true;
+		  }
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

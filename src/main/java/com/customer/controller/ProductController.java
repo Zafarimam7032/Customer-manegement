@@ -51,9 +51,9 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity<Boolean> addProductDetails(String customerId, Product product) {
+	public ResponseEntity<Boolean> addProductDetails( Product product) {
 		try {
-			boolean addProductflag = productService.addProduct(customerId, product);
+			boolean addProductflag = productService.addProduct( product);
 			if (addProductflag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
@@ -101,6 +101,23 @@ public class ProductController implements ProductApi {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+	}
+
+	@Override
+	public ResponseEntity<Boolean> assignProductToCustomer(String customerId, String productId) {
+		try {
+			Boolean assignProductFlag =productService.assignProductToCustomer(customerId,productId);
+			if (assignProductFlag) {
+				return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+			} else {
+				logger.error("Can not assign the product to the customer");
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

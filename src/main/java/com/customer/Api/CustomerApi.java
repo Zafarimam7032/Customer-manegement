@@ -17,13 +17,13 @@ import com.customer.model.Customer;
 
 public interface CustomerApi {
 
-	@GetMapping(path = "/get/all/customer")
+	@GetMapping(path = "/get/all")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<List<Customer>> getAllCustomers();
 	
-	@GetMapping(path = "/getCustomer/{customerId}")
+	@GetMapping(path = "/get/{customerId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
@@ -35,7 +35,7 @@ public interface CustomerApi {
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Boolean> addCustomerDetails(@RequestBody Customer customer);
 
-	@PutMapping(path = "/update/customerId{customerId}")
+	@PutMapping(path = "/update/customerId/{customerId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
