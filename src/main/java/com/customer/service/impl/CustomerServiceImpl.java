@@ -3,13 +3,18 @@ package com.customer.service.impl;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.customer.model.Customer;
+import com.customer.model.Product;
 import com.customer.repository.CustomerRepository;
+import com.customer.repository.ProductRepository;
 import com.customer.service.CustomerService;
 
 @Service
@@ -19,6 +24,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 
 	@Override
 	public List<Customer> findAllCustomer() {
@@ -44,8 +52,10 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer dbCustomer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(dbCustomer)) {
 			dbCustomer.setAddress(customer.getAddress() == null ? dbCustomer.getAddress() : customer.getAddress());
-			dbCustomer.setCustomerName(customer.getCustomerName() == null ? dbCustomer.getCustomerId() : customer.getCustomerName());
-			dbCustomer.setMobileNumber(customer.getMobileNumber() == null ? dbCustomer.getMobileNumber() : customer.getMobileNumber());
+			dbCustomer.setCustomerName(
+					customer.getCustomerName() == null ? dbCustomer.getCustomerId() : customer.getCustomerName());
+			dbCustomer.setMobileNumber(
+					customer.getMobileNumber() == null ? dbCustomer.getMobileNumber() : customer.getMobileNumber());
 			Customer savedCustomer = customerRepository.save(dbCustomer);
 			if (Objects.nonNull(savedCustomer)) {
 				check = true;
@@ -59,11 +69,18 @@ public class CustomerServiceImpl implements CustomerService {
 		boolean check = false;
 		try {
 			Customer customer = customerRepository.findBycustomerId(customerId);
-          if(Objects.nonNull(customer)){
-			  customerRepository.deleteById(customer.getId());
-			  check = true;
-		  }
-
+				if (Objects.nonNull(customer)) {
+					List<Product> products = customer.getProducts();
+					if (products.size() > 0) {
+						products.stream().forEach(prd->{
+							customerRepository.removeProdcutFromCustomer(customer.getId(), prd.getId());
+							productRepository.removeCustomerFromCustomer(customer.getId(), prd.getId());
+						});
+					}
+					customerRepository.deleteById(customer.getId());
+					check = true;
+				}
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

@@ -1,6 +1,7 @@
 package com.customer.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,8 @@ public class CustomerController implements CustomerApi {
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 		logger.info("getting all customer info");
 		try {
-			List<Customer> allCustomer = customerService.findAllCustomer();
-			return new ResponseEntity<>(allCustomer, HttpStatus.OK);
+			List<Customer> customers = customerService.findAllCustomer();
+			return ResponseEntity.of(Optional.of(customers));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +42,7 @@ public class CustomerController implements CustomerApi {
 		logger.info("getting  customer info");
 		try {
 			Customer customer = customerService.findCustomerByCustomerId(customerId);
-			return new ResponseEntity<>(customer, HttpStatus.OK);
+			return ResponseEntity.of(Optional.of(customer));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

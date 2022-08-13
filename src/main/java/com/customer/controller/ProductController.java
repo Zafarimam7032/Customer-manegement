@@ -1,6 +1,7 @@
 package com.customer.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class ProductController implements ProductApi {
 		logger.info("getting all product info");
 		try {
 			List<Product> products = productService.getAllProducts();
-			return new ResponseEntity<>(products, HttpStatus.OK);
+			return ResponseEntity.of(Optional.of(products));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -40,7 +41,7 @@ public class ProductController implements ProductApi {
 	public ResponseEntity<Product> getProductDetails(String productId) {
 		try {
 			Product product = productService.getProductInfo(productId);
-			return new ResponseEntity<>(product, HttpStatus.OK);
+			return ResponseEntity.of(Optional.of(product));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,9 +70,9 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity<Boolean> updateProductDetails(String customerId, String productId, Product product) {
+	public ResponseEntity<Boolean> updateProductDetails(String productId, Product product) {
 		try {
-			Boolean updateProductInfoFlag = productService.UpdateProductInfo(customerId, productId, product);
+			Boolean updateProductInfoFlag = productService.UpdateProductInfo(productId, product);
 			if (updateProductInfoFlag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
@@ -86,9 +87,9 @@ public class ProductController implements ProductApi {
 	}
 
 	@Override
-	public ResponseEntity<Boolean> deleteProdcutDetails(String customerId, String productId) {
+	public ResponseEntity<Boolean> deleteProdcutDetails(String productId) {
 		try {
-			Boolean deleteProductInfoFlag = productService.deleteProductInfo(customerId,productId);
+			Boolean deleteProductInfoFlag = productService.deleteProductInfo(productId);
 			if (deleteProductInfoFlag) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
@@ -120,4 +121,39 @@ public class ProductController implements ProductApi {
 		}
 	}
 
+	@Override
+	public ResponseEntity<Boolean> updateProdcutToCustomer(String customerId, String oldProductId,String newProductId) {
+		try {
+			Boolean updateProductFlag =productService.updateProdcutToCustomer(customerId, oldProductId, newProductId);
+			if (updateProductFlag) {
+				return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+			} else {
+				logger.error("Can not  the product to the customer");
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@Override
+	public ResponseEntity<Boolean> removeProdcutFromCustomer(String customerid, String productid) {
+
+		try {
+			Boolean removeProductFlag =productService.removeProdcutFromCustomer(customerid, productid);
+			if (removeProductFlag) {
+				return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
+			} else {
+				logger.error("Can not remove product to the customer");
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

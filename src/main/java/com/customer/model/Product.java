@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +37,9 @@ public class Product {
 	@JsonProperty("productInfo")
 	private String productInfo;
 
-	@OneToMany(targetEntity = Customer.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JsonProperty("customers")
+	@JsonIgnoreProperties("products")
+	@ManyToMany(targetEntity = Customer.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Customer> customers;
 
 }

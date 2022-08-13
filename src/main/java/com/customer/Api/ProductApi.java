@@ -34,21 +34,33 @@ public interface ProductApi {
 		@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Boolean> addProductDetails( @RequestBody Product product);
 
-	@PutMapping(path = "/product/update/customerid/{customerId}/productid/{productId}")
+	@PutMapping(path = "/product/update/productid/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> updateProductDetails(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId,@RequestBody Product product);
+	public ResponseEntity<Boolean> updateProductDetails(@PathVariable("productId") String productId,@RequestBody Product product);
 	
-	@DeleteMapping(path = "/product/delete/customerId/{customerId}/productid/{productId}")
+	@DeleteMapping(path = "/product/delete/productid/{productId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 		@ApiResponse(responseCode = "500", description = "server error"),
 		@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> deleteProdcutDetails(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
+	public ResponseEntity<Boolean> deleteProdcutDetails( @PathVariable("productId") String productId);
 
-	@PutMapping(path = "/product/assign/customerid/{customerId}/productid/{productId}")
+	@PutMapping(path = "/product/assign/productid/{productId}/customerid/{customerId}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 			@ApiResponse(responseCode = "500", description = "server error"),
 			@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Boolean> assignProductToCustomer(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
+	
+	@PutMapping(path = "update/product/customerid/{customerId}/oldproductid/{oldproductId}/newproductid/{newproductid}")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
+			@ApiResponse(responseCode = "500", description = "server error"),
+			@ApiResponse(responseCode = "404", description = "service not found") })
+	public ResponseEntity<Boolean> updateProdcutToCustomer(@PathVariable("customerId") String customerId,@PathVariable("productId") String productId,@PathVariable("newproductid") String newproductid);
+
+	@PutMapping(path = "remove/product/customerid/{customerId}/productid/{productid}")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
+			@ApiResponse(responseCode = "500", description = "server error"),
+			@ApiResponse(responseCode = "404", description = "service not found") })
+	public ResponseEntity<Boolean> removeProdcutFromCustomer(@PathVariable("customerid") String customerid,@PathVariable("productid") String productid);
 }
