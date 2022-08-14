@@ -52,7 +52,7 @@ public interface ProductApi {
 			@ApiResponse(responseCode = "404", description = "service not found") })
 	public ResponseEntity<Boolean> assignProductToCustomer(@PathVariable("customerId") String customerId, @PathVariable("productId") String productId);
 	
-	@PutMapping(path = "update/product/customerid/{customerId}/oldproductid/{oldproductId}/newproductid/{newproductid}")
+	@PutMapping(path = "update/product/customerid/{customerId}/oldproductid/{productId}/newproductid/{newproductid}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 			@ApiResponse(responseCode = "500", description = "server error"),
 			@ApiResponse(responseCode = "404", description = "service not found") })
