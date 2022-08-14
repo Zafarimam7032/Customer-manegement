@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
 		Product produt = productRepository.findByproductId(newProductid);
 		if (Objects.nonNull(customer) && Objects.nonNull(filterProduct) && Objects.isNull(productCheck)
 				&& Objects.nonNull(produt)) {
-			productRepository.updateCustomerToProduct(customer.getId(), produt.getId(), filterProduct.getId());
+			productRepository.updateCustomerToProduct(customer.getId(), filterProduct.getId(),produt.getId());
 			Customer filterCustomer = produt.getCustomers().stream()
 					.filter(cust -> cust.getCustomerId().equalsIgnoreCase(customerId)).findFirst().orElse(null);
 			customerRepository.removeProdcutFromCustomer(customer.getId(), filterProduct.getId());
