@@ -56,7 +56,7 @@ public interface ProductApi {
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
 			@ApiResponse(responseCode = "500", description = "server error"),
 			@ApiResponse(responseCode = "404", description = "service not found") })
-	public ResponseEntity<Boolean> updateProdcutToCustomer(@PathVariable("customerId") String customerId,@PathVariable("productId") String productId,@PathVariable("newproductid") String newproductid);
+	public ResponseEntity<Boolean> updateProdcutToCustomer(@PathVariable("customerId") String customerId,@PathVariable("oldproductId") String productId,@PathVariable("newproductid") String newproductid);
 
 	@PutMapping(path = "remove/product/customerid/{customerId}/productid/{productid}")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "success"),
