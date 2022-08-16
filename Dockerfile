@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} Customer-Manegement-System.jar
-ENTRYPOINT ["java","-jar","/Customer-Manegement-System.jar"]
+FROM openjdk:11
+ADD target/customer-manegement-system.jar  customer-manegement-system.jar
+EXPOSE 9090
+ENTRYPOINT ["java"  "-jar", "customer-manegement-system.jar"
