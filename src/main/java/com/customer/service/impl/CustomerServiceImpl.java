@@ -2,6 +2,7 @@ package com.customer.service.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -90,13 +91,15 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Boolean AddCustomerDetails(Customer customer) {
 		boolean check = false;
-		Customer dbCustomer = customerRepository.findBycustomerId(customer.getCustomerId());
+		String regularpattern="^((?=[A-Za-z0-9@])(?![_\\\\-]).)*$";
+		if (Pattern.compile(regularpattern).matcher(customer.getCustomerId()).matches()){
+			Customer dbCustomer = customerRepository.findBycustomerId(customer.getCustomerId());
 		if (Objects.isNull(dbCustomer)) {
 			Customer saveCustomer = customerRepository.save(customer);
 			if (Objects.nonNull(saveCustomer)) {
 				check = true;
 			}
-		}
+		}}
 		return check;
 	}
 

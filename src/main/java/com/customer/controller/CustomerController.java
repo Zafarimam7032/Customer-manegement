@@ -61,7 +61,7 @@ public class CustomerController implements CustomerApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error("customer deatials not acceptable");
+				logger.error("customer details not acceptable");
 				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 			}
 		} catch (Exception e) {

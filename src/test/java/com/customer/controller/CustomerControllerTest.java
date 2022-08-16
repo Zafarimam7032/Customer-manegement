@@ -107,6 +107,10 @@ class CustomerControllerTest {
 
 	@Test
 	void testUpdateCustomerDetails() {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+
 	}
 
 	@Test

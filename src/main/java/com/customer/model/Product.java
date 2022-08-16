@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,15 +26,21 @@ public class Product {
 	private long id;
 	@Column(name = "product_Name")
 	@JsonProperty("productName")
+	@NotBlank
+	@Size(max=15,min =4,message ="customer name should not be greater then 15 letter")
 	private String productName;
 	@Column(name = "product_Id")
 	@JsonProperty("productId")
+	@NotBlank
+	@Size(max=10,min =2,message ="customer name should not be greater then 15 letter")
 	private String productId;
 	@Column(name = "createdOn")
 	@JsonProperty("createdOn")
 	private LocalDate createdOn;
 	@Column(name = "productInfo")
 	@JsonProperty("productInfo")
+	@NotBlank
+	@Size(max=15,min =5,message ="customer name should not be greater then 15 letter")
 	private String productInfo;
 
 	@JsonProperty("customers")

@@ -3,6 +3,7 @@ package com.customer.service.impl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -50,13 +51,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public boolean addProduct(Product product) {
 		boolean check = false;
-		Product dbProduct = productRepository.findByproductId(product.getProductId());
+		String regularpattern="^((?=[A-Za-z0-9@])(?![_\\\\-]).)*$";
+		if (Pattern.compile(regularpattern).matcher(product.getProductId()).matches()){
+			Product dbProduct = productRepository.findByproductId(product.getProductId());
 		if (Objects.isNull(dbProduct)) {
 			Product saveproduct = productRepository.save(product);
 			if (Objects.nonNull(saveproduct)) {
 				check = true;
 			}
-		}
+		}}
 		return check;
 	}
 
