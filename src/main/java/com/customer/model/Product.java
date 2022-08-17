@@ -27,12 +27,12 @@ public class Product {
 	@Column(name = "product_Name")
 	@JsonProperty("productName")
 	@NotBlank
-	@Size(max=15,min =4,message ="product name should not be greater then 15 letter")
+	@Size(max=15,min =4,message ="productName should not be greater then 15 Character")
 	private String productName;
 	@Column(name = "product_Id")
 	@JsonProperty("productId")
 	@NotBlank
-	@Size(max=10,min =2,message ="product  Id name should not be greater then 15 letter")
+	@Size(max=10,min =2,message ="productId should not be greater then 15 Character")
 	private String productId;
 	@Column(name = "createdOn")
 	@JsonProperty("createdOn")

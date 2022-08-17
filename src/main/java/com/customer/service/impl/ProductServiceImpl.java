@@ -1,5 +1,6 @@
 package com.customer.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.customer.exception.BussinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,13 +69,24 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean UpdateProductInfo(String productId, Product product) {
 		boolean check = false;
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
+		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
 		Product dbProduct = productRepository.findByproductId(productId);
 		if (Objects.nonNull(dbProduct)) {
-			dbProduct.setProductId(product.getProductId() == null ? dbProduct.getProductId() : product.getProductId());
+			if(product.getProductId() != null ){
+				if(Pattern.compile(regularpattern).matcher(product.getProductId()).matches()){
+					dbProduct.setProductId(product.getProductId());
+				}else{
+					throw new BussinessException(new Date(), "  product id not acceptable", product.getProductId());
+				}}
 			dbProduct.setProductInfo(
 					product.getProductInfo() == null ? dbProduct.getProductInfo() : product.getProductInfo());
-			dbProduct.setProductName(
-					product.getProductName() == null ? dbProduct.getProductName() : product.getProductName());
+				if(product.getProductName() != null ){
+					if(Pattern.compile(regularpatternforname).matcher(product.getProductName()).matches()){
+						dbProduct.setProductName(product.getProductName());
+					}else{
+						throw new BussinessException(new Date(), "  product name not acceptable", product.getProductId());
+					}}
 			Product saveProduct = productRepository.save(dbProduct);
 			if (Objects.nonNull(saveProduct)) {
 				check = true;
@@ -103,6 +116,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean assignProductToCustomer(String customerId, String productId) {
 		Boolean check = false;
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
+		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
 		Customer customer = customerRepository.findBycustomerId(customerId);
 		Product filterProduct = customer.getProducts().stream()
 				.filter(prd -> prd.getProductId().equalsIgnoreCase(productId)).findFirst().orElse(null);
@@ -131,6 +146,8 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean updateProdcutToCustomer(String customerId, String oldProductId, String newProductid) {
 		boolean check = false;
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
+		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
 		Customer customer = customerRepository.findBycustomerId(customerId);
 		Product filterProduct = customer.getProducts().stream()
 				.filter(prd -> prd.getProductId().equalsIgnoreCase(oldProductId)).findFirst().orElse(null);

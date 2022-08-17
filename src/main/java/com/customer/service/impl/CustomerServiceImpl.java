@@ -1,5 +1,6 @@
 package com.customer.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -7,6 +8,7 @@ import java.util.regex.Pattern;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.customer.exception.BussinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +52,16 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Boolean updateCustomerDetails(String customerId, Customer customer) {
 		boolean check = false;
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
 		Customer dbCustomer = customerRepository.findBycustomerId(customerId);
 		if (Objects.nonNull(dbCustomer)) {
 			dbCustomer.setAddress(customer.getAddress() == null ? dbCustomer.getAddress() : customer.getAddress());
-			dbCustomer.setCustomerName(
-					customer.getCustomerName() == null ? dbCustomer.getCustomerId() : customer.getCustomerName());
+			if(customer.getCustomerName() != null ){
+				if(Pattern.compile(regularpatternforname).matcher(customer.getCustomerName()).matches()){
+				dbCustomer.setCustomerName(customer.getCustomerName());
+			}else{
+					throw new BussinessException(new Date(), " Customer name not acceptable", customer.getCustomerId());
+				}}
 			dbCustomer.setMobileNumber(
 					customer.getMobileNumber() == null ? dbCustomer.getMobileNumber() : customer.getMobileNumber());
 			Customer savedCustomer = customerRepository.save(dbCustomer);

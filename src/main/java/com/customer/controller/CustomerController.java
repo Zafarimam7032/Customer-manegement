@@ -47,7 +47,7 @@ public class CustomerController implements CustomerApi {
 			return ResponseEntity.of(Optional.of(customer));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
-			throw new BussinessException(new Date(), " Customer details not Found not found", customerId);
+			throw new BussinessException(new Date(), " Customer details not Found", customerId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(" error in finding  Customer details");
@@ -82,12 +82,12 @@ public class CustomerController implements CustomerApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error(" can not update customer deatials not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				logger.error(" can not update customer details not acceptable");
+				throw new BussinessException(new Date(), " Customer details not Found", customer.getCustomerId());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " Customer details not updatable", customer.getCustomerId());
 		}
 	}
 
@@ -99,12 +99,12 @@ public class CustomerController implements CustomerApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error(" can not delete customer deatials not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				logger.error(" can not delete customer details not acceptable");
+				throw new BussinessException(new Date(), " Customer details not Found to delete", customerId);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " Customer details not found to take action", customerId);
 		}
 	}
 

@@ -1,8 +1,10 @@
 package com.customer.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.customer.exception.BussinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +46,11 @@ public class ProductController implements ProductApi {
 			return ResponseEntity.of(Optional.of(product));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			throw new BussinessException(new Date(), " product details not Found", productId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new RuntimeException(" error in finding  products details");
+
 		}
 	}
 
@@ -59,12 +62,12 @@ public class ProductController implements ProductApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error("customer deatials not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				logger.error("customer details not acceptable");
+				throw new BussinessException(new Date(), " product details not acceptable", product.getProductName());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " product details not acceptable", product.getProductName());
 		}
 
 	}
@@ -77,12 +80,15 @@ public class ProductController implements ProductApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error(" can not update customer deatials not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				logger.error(" can not update customer details not acceptable");
+				throw new BussinessException(new Date(), " customer details not acceptable",
+						product.getProductId());
+
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " customer details not acceptable",
+					product.getProductId());
 		}
 	}
 
@@ -95,11 +101,12 @@ public class ProductController implements ProductApi {
 
 			} else {
 				logger.error(" can not delete customer deatials not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				throw new BussinessException(new Date(), " product details not found", productId);
+
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " Product details not found to take action", productId);
 		}
 
 	}
@@ -113,11 +120,12 @@ public class ProductController implements ProductApi {
 
 			} else {
 				logger.error("Can not assign the product to the customer");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " Details not found",productId);
 		}
 	}
 
@@ -130,11 +138,11 @@ public class ProductController implements ProductApi {
 
 			} else {
 				logger.error("Can not  the product to the customer");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				throw new BussinessException(new Date(), " product details not found", oldProductId);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " product details not found", oldProductId);
 		}
 
 	}
@@ -149,11 +157,12 @@ public class ProductController implements ProductApi {
 
 			} else {
 				logger.error("Can not remove product to the customer");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				throw new BussinessException(new Date(), " product details not found", productid);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " product details not found to remove", productid);
+
 		}
 	}
 }
