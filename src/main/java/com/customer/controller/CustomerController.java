@@ -3,6 +3,7 @@ package com.customer.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.customer.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,14 @@ public class CustomerController implements CustomerApi {
 			return ResponseEntity.of(Optional.of(customer));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			//throw new RuntimeException("not found");
+			throw new BusinessException("customer not found", HttpStatus.NOT_FOUND);
+		//	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			//return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BusinessException("Not found", HttpStatus.NOT_FOUND);
+
 		}
 
 	}

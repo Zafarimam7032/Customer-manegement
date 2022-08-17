@@ -91,8 +91,9 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Boolean AddCustomerDetails(Customer customer) {
 		boolean check = false;
-		String regularpattern="^((?=[A-Za-z0-9@])(?![_\\\\-]).)*$";
-		if (Pattern.compile(regularpattern).matcher(customer.getCustomerId()).matches()){
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
+		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
+		if ( Pattern.compile(regularpatternforname).matcher(customer.getCustomerName()).matches() && Pattern.compile(regularpattern).matcher(customer.getCustomerId()).matches()){
 			Customer dbCustomer = customerRepository.findBycustomerId(customer.getCustomerId());
 		if (Objects.isNull(dbCustomer)) {
 			Customer saveCustomer = customerRepository.save(customer);

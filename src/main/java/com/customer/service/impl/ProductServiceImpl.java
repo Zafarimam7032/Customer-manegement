@@ -51,8 +51,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public boolean addProduct(Product product) {
 		boolean check = false;
-		String regularpattern="^((?=[A-Za-z0-9@])(?![_\\\\-]).)*$";
-		if (Pattern.compile(regularpattern).matcher(product.getProductId()).matches()){
+		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
+		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
+		if ( Pattern.compile(regularpatternforname).matcher(product.getProductName()).matches() && Pattern.compile(regularpattern).matcher(product.getProductId()).matches()){
 			Product dbProduct = productRepository.findByproductId(product.getProductId());
 		if (Objects.isNull(dbProduct)) {
 			Product saveproduct = productRepository.save(product);
