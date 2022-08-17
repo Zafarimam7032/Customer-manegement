@@ -1,0 +1,15 @@
+server:
+  error:
+    include-stacktrace: never
+  port: 9090
+  servlet:
+    context-path: /customer
+spring:
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/customer
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

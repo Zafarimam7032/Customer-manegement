@@ -1,9 +1,9 @@
 package com.customer.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.customer.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.customer.Api.CustomerApi;
+import com.customer.exception.BussinessException;
 import com.customer.model.Customer;
 import com.customer.service.CustomerService;
 
@@ -46,14 +47,10 @@ public class CustomerController implements CustomerApi {
 			return ResponseEntity.of(Optional.of(customer));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
-			//throw new RuntimeException("not found");
-			throw new BusinessException("customer not found", HttpStatus.NOT_FOUND);
-		//	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			throw new BussinessException(new Date(), " Customer details not Found not found", customerId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			//return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			throw new BusinessException("Not found", HttpStatus.NOT_FOUND);
-
+			throw new RuntimeException(" error in finding  Customer details");
 		}
 
 	}
@@ -67,18 +64,20 @@ public class CustomerController implements CustomerApi {
 
 			} else {
 				logger.error("customer details not acceptable");
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				throw new BussinessException(new Date(), " customer details not acceptable",
+						customer.getCustomerName());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new BussinessException(new Date(), " customer details not acceptable", customer.getCustomerName());
+
 		}
 	}
 
 	@Override
 	public ResponseEntity<Boolean> updateCustomerDetails(String customerId, Customer customer) {
 		try {
-			Boolean customerupdatefalg = customerService.updateCustomerDetails(customerId,customer);
+			Boolean customerupdatefalg = customerService.updateCustomerDetails(customerId, customer);
 			if (customerupdatefalg) {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
