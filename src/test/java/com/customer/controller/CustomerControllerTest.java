@@ -3,11 +3,14 @@ package com.customer.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -37,6 +41,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.customer.exception.BussinessException;
 import com.customer.model.Customer;
 import com.customer.model.Product;
 import com.customer.service.CustomerService;
@@ -87,8 +92,7 @@ class CustomerControllerTest {
 		ResponseEntity<Customer> customerDetails = customerController.getCustomerDetails(Mockito.anyString());
 		assertThat(customerDetails.getStatusCodeValue()).isEqualTo(200);
 		when(customerService.findCustomerByCustomerId(Mockito.anyString())).thenReturn(null);
-		ResponseEntity<Customer> customerDetailsWithNull = customerController.getCustomerDetails(Mockito.anyString());
-		assertThat(customerDetailsWithNull.getStatusCodeValue()).isEqualTo(404);
+		assertThrows(BussinessException.class,()-> customerController.getCustomerDetails(Mockito.anyString()));
 	}
 
 	@Test
@@ -96,36 +100,37 @@ class CustomerControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 		when(customerService.AddCustomerDetails(customer)).thenReturn(Boolean.TRUE);
-		ResponseEntity<Boolean> addCustomerDetailswith500 = customerController.addCustomerDetails(Mockito.any());
-		assertThat(addCustomerDetailswith500.getStatusCodeValue()).isEqualTo(500);
+		assertThrows(NullPointerException.class,()-> customerController.addCustomerDetails(Mockito.any()));
 		ResponseEntity<Boolean> addCustomerDetails = customerController.addCustomerDetails(customer);
 		assertThat(addCustomerDetails.getStatusCodeValue()).isEqualTo(202);
-		ResponseEntity<Boolean> addCustomerDetailswith406 = customerController.addCustomerDetails(Mockito.any());
-		assertThat(addCustomerDetailswith406.getStatusCodeValue()).isEqualTo(406);
-
+		assertThrows(NullPointerException.class,()-> customerController.addCustomerDetails(Mockito.any()));
 	}
 
 	@Test
 	void testUpdateCustomerDetails() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-
+		lenient().when(customerService.updateCustomerDetails("test12", customer)).thenReturn(Boolean.TRUE);
+		assertThrows(BussinessException.class,()-> customerController.updateCustomerDetails(Mockito.any(),customer));
+		lenient().when(customerService.updateCustomerDetails("test1", customer)).thenReturn(Boolean.TRUE);
+		assertThrows(BussinessException.class, ()->customerController.updateCustomerDetails(Mockito.anyString(), customer));
+		lenient().when(customerService.updateCustomerDetails("test123", customer)).thenReturn(Boolean.TRUE);
+		ResponseEntity<Boolean> updateCustomerDetails = customerController.updateCustomerDetails("test123", customer);
+		assertThat(updateCustomerDetails.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
 
 	}
 
 	@Test
 	void testDeleteCustomerDetails() {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+	lenient().when(customerService.deleteCustomerDetails(Mockito.anyString())).thenReturn(Boolean.TRUE);
+		ResponseEntity<Boolean> deleteCustomerDetails = customerController.deleteCustomerDetails(Mockito.anyString());
+		assertThat(deleteCustomerDetails.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+		
+		lenient().when(customerService.deleteCustomerDetails("test12")).thenReturn(Boolean.FALSE);
+		assertThrows(BussinessException.class, ()-> customerController.deleteCustomerDetails("test12"));
+
 	}
 
-	private String mapToJson(Object object) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(object);
-	}
-
-	protected <T> T mapFromJson(String json, Class<T> clazz)
-			throws JsonParseException, JsonMappingException, IOException {
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, clazz);
-	}
 }

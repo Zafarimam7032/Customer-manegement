@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 
-@Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class BussinessException extends RuntimeException
 {
 
