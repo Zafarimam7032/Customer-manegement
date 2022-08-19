@@ -100,7 +100,7 @@ public class ProductController implements ProductApi {
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
 			} else {
-				logger.error(" can not delete customer deatials not acceptable");
+				logger.error(" can not delete customer details not acceptable");
 				throw new BussinessException(new Date(), " product details not found", productId);
 
 			}

@@ -116,8 +116,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean assignProductToCustomer(String customerId, String productId) {
 		Boolean check = false;
-		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
-		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
 		Customer customer = customerRepository.findBycustomerId(customerId);
 		Product filterProduct = customer.getProducts().stream()
 				.filter(prd -> prd.getProductId().equalsIgnoreCase(productId)).findFirst().orElse(null);
@@ -146,8 +144,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Boolean updateProdcutToCustomer(String customerId, String oldProductId, String newProductid) {
 		boolean check = false;
-		String regularpatternforname="[a-zA-Z][a-zA-Z ]+[a-zA-Z]$";
-		String regularpattern="^((?=[A-Za-z0-9])(?![_\\\\-]).)*$";
 		Customer customer = customerRepository.findBycustomerId(customerId);
 		Product filterProduct = customer.getProducts().stream()
 				.filter(prd -> prd.getProductId().equalsIgnoreCase(oldProductId)).findFirst().orElse(null);
