@@ -50,6 +50,10 @@ class ProductServiceImplTest {
 
 	@Test
 	void getAllProductsTest() {
+		Customer customer = new Customer(1, "test customer", "123456789", "test address", "test123", null);
+		List<Customer> customers=new ArrayList<Customer>();
+		customers.add(customer);
+		product.setCustomers(customers);
 		List<Product> products = Arrays.asList(product);
 		when(productRepository.findAll()).thenReturn(products);
 		lenient().when(productService.getAllProducts()).thenReturn(products);
@@ -77,7 +81,7 @@ class ProductServiceImplTest {
 	@Test
 	void updateProductInfoTest() {
 		when(productRepository.findByproductId(Mockito.anyString())).thenReturn(product);
-		Product updateProduct = new Product(3, "test update", "test id", null, "update test info", null);
+		Product updateProduct = new Product(3, "test update", "testid", null, "update test info", null);
 		when(productRepository.save(Mockito.any())).thenReturn(product);
 		lenient().when(productService.UpdateProductInfo(Mockito.anyString(), updateProduct))
 				.thenReturn(Boolean.TRUE);

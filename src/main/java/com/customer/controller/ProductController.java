@@ -32,7 +32,7 @@ public class ProductController implements ProductApi {
 			return ResponseEntity.of(Optional.of(products));
 		} catch (NullPointerException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			throw new BussinessException(new Date(), " product details not Found",null);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,7 +120,7 @@ public class ProductController implements ProductApi {
 
 			} else {
 				logger.error("Can not assign the product to the customer");
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				throw new BussinessException(new Date(), " Details not found",productId);
 
 			}
 		} catch (Exception e) {
